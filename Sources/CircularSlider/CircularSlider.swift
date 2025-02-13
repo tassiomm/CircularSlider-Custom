@@ -8,6 +8,7 @@
 import SwiftUI
 
 // MARK: - CircularSlider
+
 /// A view that can be interacted by dragging a knob over a circular path to select a value
 public struct CircularSlider: View {
     /// The current value of the slider
