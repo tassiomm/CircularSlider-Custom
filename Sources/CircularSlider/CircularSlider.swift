@@ -25,6 +25,11 @@ public struct CircularSlider: View {
     /// The color of the knob
     var knobColor: Color = .white
     
+    /// The radius of the draggable non-visible knob (for auxiliary user interaction only)
+    var draggableKnobRadius: Double {
+        (knobRadius * 6.0) / 2.0
+    }
+    
     /// The radius of the whole slider
     var radius: Double = 80
     
@@ -121,15 +126,13 @@ public struct CircularSlider: View {
             Circle() // knob
                 .fill(knobColor)
                 .shadow(radius: 1)
-                .frame(width: knobRadius * 2.5, height: knobRadius * 2.5)
-                .padding(10)
+                .frame(width: knobRadius * 2, height: knobRadius * 2)
                 .offset(y: -radius)
                 .rotationEffect(Angle.degrees(angle))
             
             Circle() // knob (invisible, larger, makes user interaction easier)
                 .fill(.blue.opacity(0.000001))
-                .frame(width: knobRadius * 6, height: knobRadius * 6)
-                .padding(10)
+                .frame(width: draggableKnobRadius * 2, height: draggableKnobRadius * 2)
                 .offset(y: -radius)
                 .rotationEffect(Angle.degrees(angle))
                 .gesture(
@@ -167,7 +170,7 @@ public struct CircularSlider: View {
         let vector = CGVector(dx: location.x, dy: location.y)
         
         // geting angle in radian need to subtract the knob radius and padding from the dy and dx
-        let newAngle = atan2(vector.dy - (knobRadius * 4), vector.dx - (knobRadius * 4)) + .pi/2.0
+        let newAngle = atan2(vector.dy - draggableKnobRadius, vector.dx - draggableKnobRadius) + .pi / 2.0
         
         // convert angle range from (-π to π) to (0 to 2π)
         let fixedAngle = newAngle < 0.0 ? newAngle + 2.0 * .pi : newAngle
